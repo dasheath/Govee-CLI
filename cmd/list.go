@@ -21,7 +21,7 @@ var listCmd = &cobra.Command{
 		for i, device := range devices.Data {
 			fmt.Printf("Device Number %d\n", i)
 			fmt.Println("\tSKU:", device.SKU)
-			fmt.Println("\tDevice:", device.Device)
+			fmt.Println("\tDevice:", device.DeviceId)
 			fmt.Println("\tDevice Name:", device.DeviceName)
 			fmt.Println("\tType:", device.Type)
 		}

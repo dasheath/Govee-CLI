@@ -12,8 +12,9 @@ type GetDeviceResponse struct {
 }
 
 type Device struct {
-	SKU        string `json:"sku"`
-	Device     string `json:"device"` // The MAC Address of the device
-	DeviceName string `json:"deviceName"`
+	SKU        string `json:"sku"`        // The part number of the device
+	DeviceId   string `json:"device"`     // The MAC Address of the device
+	DeviceName string `json:"deviceName"` // The nickname of the device
 	Type       string `json:"type"`
+	// Omit the capabilities array for the time being.
 }
