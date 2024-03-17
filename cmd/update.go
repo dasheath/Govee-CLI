@@ -17,7 +17,7 @@ var updateCmd = &cobra.Command{
 	This could also update various fields of any of your devices.`,
 
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("update called")
+		fmt.Println("update called. Will update the settings of this device acccordingly.")
 	},
 }
 

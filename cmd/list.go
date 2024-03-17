@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"govee/api"
 
 	"github.com/spf13/cobra"
 )
@@ -15,7 +16,16 @@ var listCmd = &cobra.Command{
 	Short: "List your devices",
 	Long:  `List all the devices attached to your Govee account.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
+
+		devices := api.GetDevices()
+		for i, device := range devices.Data {
+			fmt.Printf("Device Number %d\n", i)
+			fmt.Println("\tSKU:", device.SKU)
+			fmt.Println("\tDevice:", device.Device)
+			fmt.Println("\tDevice Name:", device.DeviceName)
+			fmt.Println("\tType:", device.Type)
+		}
+
 	},
 }
 
