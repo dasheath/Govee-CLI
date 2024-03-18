@@ -19,18 +19,18 @@ type Device struct {
 	// Omit the capabilities array for the time being.
 }
 
-type PowerDeviceBody struct {
-	RequestId string             `json:"requestId"`
-	Payload   PowerDevicePayload `json:"payload"`
+type UpdateDeviceBody struct {
+	RequestId string              `json:"requestId"`
+	Payload   UpdateDevicePayload `json:"payload"`
 }
 
-type PowerDevicePayload struct {
-	SKU        string                `json:"sku"`
-	Device     string                `json:"device"`
-	Capability PowerDeviceCapability `json:"capability"`
+type UpdateDevicePayload struct {
+	SKU        string           `json:"sku"`
+	Device     string           `json:"device"`
+	Capability DeviceCapability `json:"capability"`
 }
 
-type PowerDeviceCapability struct {
+type DeviceCapability struct {
 	CapabilityType string `json:"type"`
 	Instance       string `json:"instance"`
 	Value          int    `json:"value"`

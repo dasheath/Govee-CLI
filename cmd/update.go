@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"govee/api"
 	"strings"
-	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -26,6 +25,10 @@ var updateCmd = &cobra.Command{
 	Run: updateDeviceState,
 }
 
+const (
+	SentinelInt int = 1005
+)
+
 func init() {
 	rootCmd.AddCommand(updateCmd)
 
@@ -39,25 +42,13 @@ func init() {
 	// is called directly, e.g.:
 	// updateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	updateCmd.Flags().StringP("device", "d", "office", "Alias for which device to update")
-	updateCmd.Flags().IntP("power", "p", 0, "Whether to power on or off")
-	updateCmd.Flags().IntP("brightness", "b", 25, "Brightness on scale of 0 to 100")
+	updateCmd.Flags().IntP("power", "p", SentinelInt, "Whether to power on or off")
+	updateCmd.Flags().IntP("brightness", "b", SentinelInt, "Brightness on scale of 0 to 100")
 }
 
 func updateDeviceState(cmd *cobra.Command, args []string) {
 
 	device, _ := cmd.Flags().GetString("device")
-	power, _ := cmd.Flags().GetInt("power")
-	if power != 0 && power != 1 {
-		fmt.Println("Power selection is invalid! Please input either 0 (off) or 1 (on).")
-		return
-	}
-	brightness, _ := cmd.Flags().GetInt("brightness")
-	if brightness < 0 || brightness > 100 {
-		fmt.Printf("Brightness input of %d ", brightness)
-		brightness = min(max(brightness, 0), 100)
-		fmt.Printf("has been clipped to the value: %d\n", brightness)
-	}
-
 	devices := api.GetDevices()
 	var deviceId string
 	for _, searchDevice := range devices.Data {
@@ -66,7 +57,27 @@ func updateDeviceState(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	time.Sleep(time.Second)
-	api.SetDevicePower(deviceId, power)
+	if deviceId == "" {
+		fmt.Println("No device could be found with that nickname! Please try again.")
+		return
+	}
 
+	power, _ := cmd.Flags().GetInt("power")
+	if power != SentinelInt {
+		if power != 0 && power != 1 {
+			fmt.Println("Power selection is invalid! Please input either 0 (off) or 1 (on).")
+			return
+		}
+		api.SetDevicePower(deviceId, power)
+	}
+
+	brightness, _ := cmd.Flags().GetInt("brightness")
+	if brightness != SentinelInt {
+		if brightness < 0 || brightness > 100 {
+			fmt.Printf("Brightness input of %d ", brightness)
+			brightness = min(max(brightness, 0), 100)
+			fmt.Printf("has been clipped to the value: %d\n", brightness)
+		}
+		api.SetDeviceBrightness(deviceId, brightness)
+	}
 }

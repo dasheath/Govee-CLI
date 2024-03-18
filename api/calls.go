@@ -46,22 +46,17 @@ func GetDevices() GetDeviceResponse {
 	return response
 }
 
-func SetDevicePower(deviceId string, powerValue int) {
-
-	powerDeviceBody := PowerDeviceBody{
+func setDeviceCapability(deviceId string, capability DeviceCapability) {
+	updateDeviceBody := UpdateDeviceBody{
 		RequestId: "uuid",
-		Payload: PowerDevicePayload{
-			SKU:    BulbSKU,
-			Device: deviceId,
-			Capability: PowerDeviceCapability{
-				CapabilityType: "devices.capabilities.on_off",
-				Instance:       "powerSwitch",
-				Value:          powerValue,
-			},
+		Payload: UpdateDevicePayload{
+			SKU:        BulbSKU,
+			Device:     deviceId,
+			Capability: capability,
 		},
 	}
 
-	jsonBody, err := json.Marshal(powerDeviceBody)
+	jsonBody, err := json.Marshal(updateDeviceBody)
 	if err != nil {
 		panic(err)
 	}
@@ -77,9 +72,7 @@ func SetDevicePower(deviceId string, powerValue int) {
 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Govee-API-Key", os.Getenv("Govee_API_Key"))
-
 	res, err := http.DefaultClient.Do(req)
-
 	if err != nil {
 		panic(err)
 	}
@@ -88,9 +81,28 @@ func SetDevicePower(deviceId string, powerValue int) {
 	if res.StatusCode == 400 {
 		panic("Bad Request!")
 	} else if res.StatusCode != 200 {
-		fmt.Printf("%v\n", res.StatusCode)
-		panic("API call for power setting failed")
+		panic("API call to update device setting failed")
 	} else {
 		fmt.Printf("Call Succeeded for device: %v\n", deviceId)
 	}
+}
+
+func SetDevicePower(deviceId string, powerValue int) {
+	capability := DeviceCapability{
+		CapabilityType: "devices.capabilities.on_off",
+		Instance:       "powerSwitch",
+		Value:          powerValue,
+	}
+
+	setDeviceCapability(deviceId, capability)
+}
+
+func SetDeviceBrightness(deviceId string, brightnessValue int) {
+	capability := DeviceCapability{
+		CapabilityType: "devices.capabilities.range",
+		Instance:       "brightness",
+		Value:          brightnessValue,
+	}
+
+	setDeviceCapability(deviceId, capability)
 }
