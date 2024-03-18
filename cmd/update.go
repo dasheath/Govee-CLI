@@ -1,5 +1,5 @@
 /*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
+Copyright © 2024 Heath McCabe
 */
 package cmd
 
@@ -32,15 +32,6 @@ const (
 func init() {
 	rootCmd.AddCommand(updateCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// updateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// updateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	updateCmd.Flags().StringP("device", "d", "office", "Alias for which device to update")
 	updateCmd.Flags().IntP("power", "p", SentinelInt, "Whether to power on or off")
 	updateCmd.Flags().IntP("brightness", "b", SentinelInt, "Brightness on scale of 0 to 100")
