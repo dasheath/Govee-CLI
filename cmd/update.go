@@ -15,8 +15,7 @@ import (
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update the state of one of your devices.",
-	Long: `Update the power, brightness, or color of a bulb. 
-	This could also update various fields of any of your devices.
+	Long: `Update the power state or brightness of a device. 
 	
 	Example:
 	> govee update -d bedroom -p 1 -b 100
